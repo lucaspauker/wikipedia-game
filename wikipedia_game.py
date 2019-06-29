@@ -8,10 +8,31 @@ def get_links(url):
     The URL is assumed to be a wikipedia page. This method returns a list of links as strings.
     """
     links = []
-    soup = BeautifulSoup(url, 'html.parser')
+    html_doc = requests.get(url)
+    html_doc = html_doc.content
+    # print(html_doc)
+    soup = BeautifulSoup(html_doc, 'html.parser')
     for link in soup.find_all('a'):
-        if "wiki" in link:
-            links.append(link)
+        link = link.get('href')
+        # make sure it is not a div of class: "reflist columns references-column-width"
+        # make sure it is not a table of class: "box-BLP_unsourced_section plainlinks metadata ambox ambox-content ambox-BLP_unsourced"
+        goodLink = False
+
+        # if any of these conditions are false, then it is not a 'good link'
+        if link:
+            # notWeird = (link['class'] != "box-BLP_unsourced_section plainlinks metadata ambox ambox-content ambox-BLP_unsourced")
+            # notReferences = (link['class'] != "reflist columns references-column-width")
+            notCitation = not ("cite_note" in link)
+            
+            if notCitation:
+                goodLink = True
+
+        if goodLink:
+            wikiPage = "/wiki/" in link
+            if wikiPage:
+                links.append(link)
+                print(link)
+
     return links
         
 def run_bfs(end_url, start_url):
