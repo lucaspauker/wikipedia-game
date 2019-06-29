@@ -5,12 +5,8 @@ def get_links(url):
     """This method gets the links contained in the body of the given url.
     The URL is assumed to be a wikipedia page. This method returns a list of links as strings.
     """
-    links = []
     soup = BeautifulSoup(url, 'html.parser')
-    for link in soup.find_all('a'):
-        if "wiki" in link:
-            links.append(link)
-    return links
+    for links in soup:
         
 def run_bfs(end_url, start_url):
     """Run BFS to find the shortest path from start_url to end_url by clicking
