@@ -31,8 +31,6 @@ def get_links(url):
             wikiPage = "/wiki/" in link
             if wikiPage:
                 link = "https://en.wikipedia.org" + link
-                
-                
 
     return links
         
