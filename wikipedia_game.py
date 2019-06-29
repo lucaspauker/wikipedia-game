@@ -30,8 +30,9 @@ def get_links(url):
         if goodLink:
             wikiPage = "/wiki/" in link
             if wikiPage:
-                links.append(link)
-                print(link)
+                link = "https://en.wikipedia.org" + link
+                if validators.url(link):
+                    links.append(link)
 
     return links
         
