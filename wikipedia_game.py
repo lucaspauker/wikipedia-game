@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-
+import validators
 from collections import deque
 
 def get_links(url):
@@ -23,15 +23,16 @@ def get_links(url):
             # notWeird = (link['class'] != "box-BLP_unsourced_section plainlinks metadata ambox ambox-content ambox-BLP_unsourced")
             # notReferences = (link['class'] != "reflist columns references-column-width")
             notCitation = not ("cite_note" in link)
-            
-            if notCitation:
+            notOtherWebsite = not ("https" in link)
+            if notCitation and notOtherWebsite:
                 goodLink = True
 
         if goodLink:
             wikiPage = "/wiki/" in link
             if wikiPage:
-                links.append(link)
-                print(link)
+                link = "https://en.wikipedia.org" + link
+                
+                
 
     return links
         
