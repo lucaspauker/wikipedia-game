@@ -79,7 +79,7 @@ def run_bfs(end_url, start_url):
             # Repeats are disallowed since they are necessarily a longer path
             print(url)
             if url not in visited_link_dict.keys():
-                visited_link_dict[url] = current_url
+                visited_link_dict[url] = current_url #pages that link to the url
                 link_queue.append(url)
     return []
 
