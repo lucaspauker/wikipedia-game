@@ -20,7 +20,7 @@ def get_links(url):
 
         # if any of these conditions are false, then it is not a 'good link'
         if link:
-            notPortal = ("Portal" not in link and "Special" not in link and "Wikipedia" not in link and "Help" not in link and "File:" not in link)
+            notPortal = ("Portal" not in link and "Special" not in link and "Wikipedia" not in link and "Help" not in link)
             notWeird = ("box-BLP_unsourced_section plainlinks metadata ambox ambox-content ambox-BLP_unsourced" not in link and "Talk" not in link and "Category" not in link)
             notReferences = ("reflist columns references-column-width" not in link and "wikimedia.org" not in link)
             notCitation = not ("cite_note" in link)
@@ -32,11 +32,8 @@ def get_links(url):
             wikiPage = "/wiki/" in link
             if wikiPage:
                 link = "https://en.wikipedia.org" + link
-<<<<<<< HEAD
-=======
                 if validators.url(link):
                     links.append(link)
->>>>>>> d563ccb... this isn't working
 
     return links
 
