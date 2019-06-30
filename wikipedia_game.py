@@ -51,7 +51,7 @@ def get_links_to(url):
     for link in all_links:
         href = link.get("href")
         if href and href.startswith("/wiki"):
-            links.append(href)
+            links.append("https://en.wikipedia.org" + href)
     return links
 
 def run_bfs(end_url, start_url):
@@ -62,19 +62,22 @@ def run_bfs(end_url, start_url):
     """
     link_queue = deque([start_url])
     link_path = [start_url]
+    links_to_end = get_links_to(end_url)
     # Keep track of previous links to output path to end_url
     visited_link_dict = {start_url: None}
     while link_queue:
         current_url = link_queue.popleft()
         links_on_page = get_links_from(current_url)
         if not links_on_page: continue
-        if end_url in links_on_page:
-            prev_link = current_url
-            while visited_link_dict[prev_link]:
-                link_path.append(prev_link)
-                prev_link = visited_link_dict[prev_link]
-            link_path.append(end_url)
-            return link_path
+        for link in links_to_end:
+            if link in links_on_page:
+                prev_link = current_url
+                while visited_link_dict[prev_link]:
+                    link_path.append(prev_link)
+                    prev_link = visited_link_dict[prev_link]
+                link_path.append(link)
+                link_path.append(end_url)
+                return link_path
         for url in links_on_page:
             # Repeats are disallowed since they are necessarily a longer path
             print(url)
@@ -92,15 +95,7 @@ def get_page_title(url):
 
 if __name__ == "__main__":
     kevin_bacon_url = "https://en.wikipedia.org/wiki/Kevin_Bacon"
-<<<<<<< HEAD
     start_url = "https://en.wikipedia.org/wiki/Arabian_Sea"
     shortest_path = run_bfs(kevin_bacon_url, start_url)
     print("Shortest path from", get_page_title(start_url), "to",
             get_page_title(kevin_bacon_url) + ":\n" + str(shortest_path))
-=======
-    start_url = "https://en.wikipedia.org/wiki/Hollywood"
-    #shortest_path = run_bfs(kevin_bacon_url, start_url)
-    #print("Shortest path from", get_page_title(start_url), "to",
-    #        get_page_title(kevin_bacon_url) + ":\n" + str(shortest_path))
-    print(get_links_to(kevin_bacon_url))
->>>>>>> 3572aa5... Add links_to function
