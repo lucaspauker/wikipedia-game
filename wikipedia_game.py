@@ -24,10 +24,11 @@ def get_links_from(url):
         if link:
             notPortal = ("Portal" not in link and "Special" not in link and "Wikipedia" not in link and "Help" not in link and "File:" not in link)
             notWeird = ("box-BLP_unsourced_section plainlinks metadata ambox ambox-content ambox-BLP_unsourced" not in link and "Talk" not in link and "Category" not in link)
+            notMainPage = ("Main_Page" not in link)
             notReferences = ("reflist columns references-column-width" not in link and "wikimedia.org" not in link)
             notCitation = not ("cite_note" in link)
             notOtherWebsite = not ("https" in link)
-            if notWeird and notReferences and notCitation and notOtherWebsite and notPortal:
+            if notWeird and notReferences and notCitation and notMainPage and notOtherWebsite and notPortal:
                 goodLink = True
 
         if goodLink:
