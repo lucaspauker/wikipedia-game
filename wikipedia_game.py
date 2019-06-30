@@ -35,7 +35,7 @@ def get_links(url):
                     links.append(link)
 
     return links
-        
+
 def run_bfs(end_url, start_url):
     """Run BFS to find the shortest path from start_url to end_url by clicking
     links on the page. This method returns a list of links one needs to click to get
@@ -51,10 +51,11 @@ def run_bfs(end_url, start_url):
         links_on_page = get_links(current_url)
         if not links_on_page: continue
         if end_url in links_on_page:
-            prev_link = end_url
-            while prev_link:
-                prev_link = visited_link_dict[prev_link]
+            prev_link = current_url
+            while visited_link_dict[prev_link]:
                 link_path.append(prev_link)
+                prev_link = visited_link_dict[prev_link]
+            link_path.append(end_url)
             return link_path
         for url in links_on_page:
             # Repeats are disallowed since they are necessarily a longer path
@@ -72,7 +73,7 @@ def get_page_title(url):
 
 if __name__ == "__main__":
     kevin_bacon_url = "https://en.wikipedia.org/wiki/Kevin_Bacon"
-    start_url = "https://en.wikipedia.org/wiki/Nicole_Kassell"
+    start_url = "https://en.wikipedia.org/wiki/Hollywood"
     shortest_path = run_bfs(kevin_bacon_url, start_url)
     print("Shortest path from", get_page_title(start_url), "to",
             get_page_title(kevin_bacon_url) + ":\n" + str(shortest_path))
