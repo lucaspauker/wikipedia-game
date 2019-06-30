@@ -20,8 +20,8 @@ def get_links(url):
 
         # if any of these conditions are false, then it is not a 'good link'
         if link:
-            # notWeird = (link['class'] != "box-BLP_unsourced_section plainlinks metadata ambox ambox-content ambox-BLP_unsourced")
-            # notReferences = (link['class'] != "reflist columns references-column-width")
+            notWeird = ("box-BLP_unsourced_section plainlinks metadata ambox ambox-content ambox-BLP_unsourced" not in link)
+            notReferences = ("reflist columns references-column-width" not in link)
             notCitation = not ("cite_note" in link)
             notOtherWebsite = not ("https" in link)
             if notCitation and notOtherWebsite:
@@ -62,6 +62,7 @@ def run_bfs(end_url, start_url):
             return link_path
         for url in links_on_page:
             # Repeats are disallowed since they are necessarily a longer path
+            print(url)
             if url not in visited_link_dict.keys():
                 visited_link_dict[url] = current_url
                 link_queue.append(url)
@@ -76,7 +77,7 @@ def get_page_title(url):
 
 if __name__ == "__main__":
     kevin_bacon_url = "https://en.wikipedia.org/wiki/Kevin_Bacon"
-    start_url = "https://en.wikipedia.org/wiki/Hollywood"
+    start_url = "https://en.wikipedia.org/wiki/Arabian_Sea"
     shortest_path = run_bfs(kevin_bacon_url, start_url)
     print("Shortest path from", get_page_title(start_url), "to",
             get_page_title(kevin_bacon_url) + ":\n" + str(shortest_path))
