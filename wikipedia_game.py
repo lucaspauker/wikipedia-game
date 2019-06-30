@@ -1,9 +1,11 @@
 import requests
-from bs4 import BeautifulSoup
 import validators
+import time
+
+from bs4 import BeautifulSoup
 from collections import deque
 
-def get_links(url):
+def get_links_from(url):
     """This method gets the links contained in the body of the given url.
     The URL is assumed to be a wikipedia page. This method returns a list of links as strings.
     """
@@ -32,12 +34,24 @@ def get_links(url):
             wikiPage = "/wiki/" in link
             if wikiPage:
                 link = "https://en.wikipedia.org" + link
-<<<<<<< HEAD
-=======
-                if validators.url(link):
-                    links.append(link)
->>>>>>> d563ccb... this isn't working
 
+    return links
+
+def get_links_to(url):
+    """Uses Wikipedia's What Links Here tool to return all the pages that link to the
+    inputted Wikipedia URL.
+    """
+    url_base = "https://en.wikipedia.org/w/index.php?title=Special:WhatLinksHere/"
+    tail = url.split("/")[-1]
+    r = requests.get(url_base + tail + "&limit=10000")
+    html = r.content
+    soup = BeautifulSoup(html, 'html.parser')
+    all_links = soup.find_all('a')
+    links = []
+    for link in all_links:
+        href = link.get("href")
+        if href and href.startswith("/wiki"):
+            links.append(href)
     return links
 
 def run_bfs(end_url, start_url):
@@ -52,7 +66,7 @@ def run_bfs(end_url, start_url):
     visited_link_dict = {start_url: None}
     while link_queue:
         current_url = link_queue.popleft()
-        links_on_page = get_links(current_url)
+        links_on_page = get_links_from(current_url)
         if not links_on_page: continue
         if end_url in links_on_page:
             prev_link = current_url
@@ -78,7 +92,15 @@ def get_page_title(url):
 
 if __name__ == "__main__":
     kevin_bacon_url = "https://en.wikipedia.org/wiki/Kevin_Bacon"
+<<<<<<< HEAD
     start_url = "https://en.wikipedia.org/wiki/Arabian_Sea"
     shortest_path = run_bfs(kevin_bacon_url, start_url)
     print("Shortest path from", get_page_title(start_url), "to",
             get_page_title(kevin_bacon_url) + ":\n" + str(shortest_path))
+=======
+    start_url = "https://en.wikipedia.org/wiki/Hollywood"
+    #shortest_path = run_bfs(kevin_bacon_url, start_url)
+    #print("Shortest path from", get_page_title(start_url), "to",
+    #        get_page_title(kevin_bacon_url) + ":\n" + str(shortest_path))
+    print(get_links_to(kevin_bacon_url))
+>>>>>>> 3572aa5... Add links_to function
