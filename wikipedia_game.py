@@ -53,6 +53,7 @@ def get_links_to(url):
         href = link.get("href")
         if href and href.startswith("/wiki"):
             links.append("https://en.wikipedia.org" + href)
+
     return links
 
 def run_bfs(end_url, start_url):
@@ -71,6 +72,7 @@ def run_bfs(end_url, start_url):
         links_on_page = get_links_from(current_url)
         if not links_on_page: continue
         for link in links_to_end:
+            # This is inherently a 3-step process
             if link in links_on_page:
                 prev_link = current_url
                 while visited_link_dict[prev_link]:
@@ -81,10 +83,11 @@ def run_bfs(end_url, start_url):
                 return link_path
         for url in links_on_page:
             # Repeats are disallowed since they are necessarily a longer path
-            print(url)
+            #print(url)
             if url not in visited_link_dict.keys():
                 visited_link_dict[url] = current_url #pages that link to the url
                 link_queue.append(url)
+            
     return []
 
 def get_page_title(url):
@@ -94,9 +97,16 @@ def get_page_title(url):
     tail = tail.replace("_", " ")
     return tail
 
+#This doesn't run when we are importing the file, so taking off if condition
+
+def funcToRun(end, start):
+    shortest_path = run_bfs(end, start)
+    return ("Shortest path from ", get_page_title(start), " to ",
+            get_page_title(end) + ":\n" + str(shortest_path))
+
 if __name__ == "__main__":
-    kevin_bacon_url = "https://en.wikipedia.org/wiki/Kevin_Bacon"
-    start_url = "https://en.wikipedia.org/wiki/Arabian_Sea"
+    kevin_bacon_url = "https://en.wikipedia.org/wiki/Baboon"
+    start_url = "https://en.wikipedia.org/wiki/Moby Dick"
     shortest_path = run_bfs(kevin_bacon_url, start_url)
     print("Shortest path from", get_page_title(start_url), "to",
             get_page_title(kevin_bacon_url) + ":\n" + str(shortest_path))
