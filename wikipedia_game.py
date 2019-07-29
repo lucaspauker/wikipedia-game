@@ -1,5 +1,4 @@
 import requests
-
 import time
 
 from bs4 import BeautifulSoup
@@ -12,14 +11,12 @@ def get_links_from(url):
     links = []
     html_doc = requests.get(url)
     html_doc = html_doc.content
-    # print(html_doc)
     soup = BeautifulSoup(html_doc, 'html.parser')
     for link in soup.find_all('a'):
         link = link.get('href')
         # make sure it is not a div of class: "reflist columns references-column-width"
         # make sure it is not a table of class: "box-BLP_unsourced_section plainlinks metadata ambox ambox-content ambox-BLP_unsourced"
         goodLink = False
-
         # if any of these conditions are false, then it is not a 'good link'
         if link:
             notPortal = ("Portal" not in link and "Special" not in link and "Wikipedia" not in link and "Help" not in link and "File:" not in link)
@@ -30,13 +27,11 @@ def get_links_from(url):
             notOtherWebsite = not ("https" in link)
             if notWeird and notReferences and notCitation and notMainPage and notOtherWebsite and notPortal:
                 goodLink = True
-
         if goodLink:
             wikiPage = "/wiki/" in link
             if wikiPage:
                 link = "https://en.wikipedia.org" + link
                 links.append(link)
-
     return links
 
 def get_links_to(url):
@@ -54,7 +49,6 @@ def get_links_to(url):
         href = link.get("href")
         if href and href.startswith("/wiki"):
             links.append("https://en.wikipedia.org" + href)
-
     return links
 
 def run_bfs(end_url, start_url):
@@ -88,7 +82,6 @@ def run_bfs(end_url, start_url):
             if url not in visited_link_dict.keys():
                 visited_link_dict[url] = current_url #pages that link to the url
                 link_queue.append(url)
-            
     return []
 
 def get_page_title(url):
@@ -99,7 +92,6 @@ def get_page_title(url):
     return tail
 
 #This doesn't run when we are importing the file, so taking off if condition
-
 def funcToRun(end, start):
     shortest_path = run_bfs(end, start)
     return ("Shortest path from ", get_page_title(start), " to ",
