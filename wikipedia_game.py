@@ -51,6 +51,23 @@ def get_links_to(url):
             links.append("https://en.wikipedia.org" + href)
     return links
 
+def cleanup(link_path):
+    # prune link_path by taking advantage of any repeated nodes
+    nodes = {node: 0 for node in link_path}
+    for i in range(len(link_path)):
+        node = link_path[i]
+        # encode the last occurrence of the element
+        nodes[node] = i
+    pruned_path = []
+    for j in range(len(link_path)):
+        if nodes[link_path[j]] > j:
+            # start appending from there
+            j = nodes[link_path[j]]
+        else:
+            pruned_path.append(link_path[j])
+    print(pruned_path)
+    return pruned_path
+
 def run_bfs(end_url, start_url):
     """Run BFS to find the shortest path from start_url to end_url by clicking
     links on the page. This method returns a list of links one needs to click to get
@@ -75,6 +92,7 @@ def run_bfs(end_url, start_url):
                     prev_link = visited_link_dict[prev_link]
                 link_path.append(link)
                 link_path.append(end_url)
+                link_path = cleanup(link_path)
                 return link_path
         for url in links_on_page:
             # Repeats are disallowed since they are necessarily a longer path
@@ -98,8 +116,8 @@ def funcToRun(end, start):
             get_page_title(end) + ":\n" + str(shortest_path))
 
 if __name__ == "__main__":
-    kevin_bacon_url = "https://en.wikipedia.org/wiki/Baboon"
-    start_url = "https://en.wikipedia.org/wiki/Moby Dick"
+    kevin_bacon_url = "https://en.wikipedia.org/wiki/Stanford_Band"
+    start_url = "https://en.wikipedia.org/wiki/Raccoon"
     shortest_path = run_bfs(kevin_bacon_url, start_url)
     print("Shortest path from", get_page_title(start_url), "to",
             get_page_title(kevin_bacon_url) + ":\n" + str(shortest_path))
