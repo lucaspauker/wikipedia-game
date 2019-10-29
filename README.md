@@ -1,2 +1,2 @@
 # wikipedia-game
-Hosted at wikibfs.herokuapp.com
+Hosted at <a href="wikibfs.herokuapp.com">wikibfs.herokuapp.com</a>
